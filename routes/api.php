@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -12,9 +13,9 @@ Route::group([
 });
 
 Route::get('/user', function (Request $request) {
+    /** @var User $user */
     $user = Auth::guard('sanctum')->user();
-    for ($i = 0; $i < 1000; $i++) {
-        $users = \App\Models\User::query()->get();
-    }
+    $user->load('person');
+
     return response()->json($user);
 })->middleware('gb-auth');
