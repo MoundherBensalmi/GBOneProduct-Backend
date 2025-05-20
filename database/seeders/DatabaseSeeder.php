@@ -17,13 +17,13 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        Person::query()->create([
+        $admin = Person::query()->create([
             'id' => 1,
             'name' => 'أدمن',
             'tr_name' => 'Admin',
             'phone' => '1234567890',
         ]);
-        User::query()->create([
+        $admin->user()->create([
             'person_id' => 1,
             'username' => 'admin',
             'password' => bcrypt('123'),
