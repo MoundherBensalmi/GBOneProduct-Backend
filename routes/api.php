@@ -1,16 +1,11 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::group([
-    'prefix' => 'auth',
-], function () {
-    Route::post('login', [AuthController::class, 'login']);
-});
+include __DIR__ . '/api/auth.php';
 
 Route::get('/user', function (Request $request) {
     /** @var User $user */
