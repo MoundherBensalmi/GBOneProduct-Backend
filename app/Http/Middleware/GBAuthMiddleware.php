@@ -9,16 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class GBAuthMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next, ...$guards): Response
     {
         $user = Auth::guard('sanctum')->user();
         if (!$user) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'unauthorized'], 401);
         }
 
         $requiredRole = $guards[0] ?? null;

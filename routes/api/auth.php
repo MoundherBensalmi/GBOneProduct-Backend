@@ -8,4 +8,5 @@ Route::group([
     'prefix' => 'auth',
 ], function () {
     Route::post('login', [AuthController::class, 'login']);
+    Route::get('me', [AuthController::class, 'me'])->middleware('gb-auth');
 });

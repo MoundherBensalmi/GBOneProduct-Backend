@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -14,14 +13,25 @@ class AuthController extends Controller
     {
         if (Auth::attempt(['username' => $request->get('username'), 'password' => $request->get('password')])) {
             $user = Auth::user();
-            $token = $user->createToken('MyApp')->plainTextToken;
+            $token = $user->createToken('GBOneProduct')->plainTextToken;
 
             return $this->sendResponse([
                 'user' => $user,
                 'token' => $token,
             ], 'user_successfully_logged_in');
         } else {
-            return $this->sendError('wrong_credentials.', ['error' => 'wrong_credentials']);
+            return $this->sendError('wrong_credentials.', ['error' => 'wrong_credentials'], 401);
         }
+    }
+
+    public function me(): JsonResponse
+    {
+        /** @var User $user */
+        $user = Auth::guard('sanctum')->user();
+        $user->load('person');
+
+        return $this->sendResponse([
+            'user' => $user,
+        ]);
     }
 }

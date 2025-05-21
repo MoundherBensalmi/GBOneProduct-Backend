@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Position extends Model
@@ -17,8 +17,8 @@ class Position extends Model
         'tr_name',
     ];
 
-    public function people(): HasMany
+    public function people(): belongsToMany
     {
-        return $this->hasMany(Person::class);
+        return $this->belongsToMany(Person::class, 'people_positions', 'position_id', 'person_id');
     }
 }
