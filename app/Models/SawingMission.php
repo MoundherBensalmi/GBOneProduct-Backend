@@ -13,6 +13,8 @@ class SawingMission extends Model
 
     protected $fillable = [
         'work_session_id',
+        'is_started',
+        'is_finished',
     ];
 
     public function workSession(): BelongsTo

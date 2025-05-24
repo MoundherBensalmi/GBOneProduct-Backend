@@ -12,6 +12,7 @@ class SawingRotation extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'sawing_station_id',
         'sawing_mission_id',
         'is_initial',
         'amount',
@@ -21,6 +22,11 @@ class SawingRotation extends Model
         'is_initial' => 'boolean',
         'amount' => 'decimal:2',
     ];
+
+    public function sawingStation(): BelongsTo
+    {
+        return $this->belongsTo(SawingStation::class);
+    }
 
     public function sawingMission(): BelongsTo
     {

@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('sawing_rotations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sawing_mission_id')
-                ->constrained('sawing_missions');
+
+            $table->foreignId('sawing_mission_id')->constrained('sawing_missions');
+            $table->foreignId('sawing_station_id')->constrained('sawing_stations');
 
             $table->boolean('is_initial')->default(false);
             $table->decimal('amount')->default(0);

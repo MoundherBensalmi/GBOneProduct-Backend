@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sawing_missions', function (Blueprint $table) {
+        Schema::create('sawing_stations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('work_session_id')
-                ->constrained('work_sessions');
-
-            $table->boolean('is_started')->default(false);
-            $table->boolean('is_finished')->default(false);
+            $table->string('name');
 
             $table->softDeletes();
             $table->timestamps();
@@ -29,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sawing_missions');
+        Schema::dropIfExists('sawing_stations');
     }
 };
