@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\PayPeriod;
 use App\Models\Person;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -62,6 +61,7 @@ class DatabaseSeeder extends Seeder
         PayPeriod::query()->create([
             'start_date' => '2025-05-15',
             'end_date' => '2025-05-31',
+            'is_active' => true,
             'white_sorting_price' => 5,
             'yellow_sorting_price' => 5,
             'sorting_and_trimming_price' => 10,

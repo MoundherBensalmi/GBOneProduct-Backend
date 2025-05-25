@@ -13,6 +13,7 @@ class PayPeriod extends Model
     protected $fillable = [
         'start_date',
         'end_date',
+        'is_active',
         'white_sorting_price',
         'yellow_sorting_price',
         'sorting_and_trimming_price',

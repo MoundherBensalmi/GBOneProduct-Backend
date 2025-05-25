@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->date('start_date');
             $table->date('end_date');
+            $table->boolean('is_active')->default(false);
 
             $table->decimal('white_sorting_price')->default(0);
             $table->decimal('yellow_sorting_price')->default(0);
