@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\PayPeriod;
 use App\Models\Person;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -15,19 +16,65 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        $admin = Person::query()->create([
-            'id' => 1,
+        Person::query()->create([
             'name' => 'أدمن',
             'tr_name' => 'Admin',
             'phone' => '1234567890',
-        ]);
-        $admin->user()->create([
-            'person_id' => 1,
+        ])->user()->create([
             'username' => 'admin',
             'password' => bcrypt('123'),
             'role' => 'admin',
+        ]);
+
+        Person::query()->insert([
+            [
+                'name' => 'أحمد',
+                'tr_name' => 'Ahmed',
+                'phone' => '0555555555',
+            ],
+            [
+                'name' => 'محمد',
+                'tr_name' => 'Mehmed',
+                'phone' => '0555555555',
+            ],
+            [
+                'name' => 'علي',
+                'tr_name' => 'Ali',
+                'phone' => '0555555555',
+            ],
+            [
+                'name' => 'يوسف',
+                'tr_name' => 'Yusuf',
+                'phone' => '0555555555',
+            ],
+            [
+                'name' => 'عمر',
+                'tr_name' => 'Omer',
+                'phone' => '0555555555',
+            ],
+            [
+                'name' => 'سليم',
+                'tr_name' => 'Salim',
+                'phone' => '0555555555',
+            ],
+        ]);
+
+        PayPeriod::query()->create([
+            'start_date' => '2025-05-15',
+            'end_date' => '2025-05-31',
+            'white_sorting_price' => 5,
+            'yellow_sorting_price' => 5,
+            'sorting_and_trimming_price' => 10,
+            'sawing_price' => 7,
+            'sorting_and_sawing_price' => 10,
+        ])->workSessions()->create([
+            'date' => '2025-05-15',
+            'start_time' => '2025-05-15 08:00:00',
+            'end_time' => '2025-05-15 17:00:00',
+            'is_active' => true,
+        ])->sawingMissions()->create([
+            'is_started' => false,
+            'is_finished' => false,
         ]);
     }
 }
