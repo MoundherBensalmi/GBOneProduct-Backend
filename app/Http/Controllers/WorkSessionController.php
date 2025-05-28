@@ -28,8 +28,6 @@ class WorkSessionController extends Controller
 
     public function show(int $session): JsonResponse
     {
-        $start_time = microtime(true);
-
         $work_session = WorkSession::query()
             ->whereHas('payPeriod', function ($query) {
                 $query->where('is_active', 1);
@@ -40,13 +38,11 @@ class WorkSessionController extends Controller
         if (!$work_session) {
             return response()->json([
                 'message' => 'Work session not found',
-                'duration_ms' => round((microtime(true) - $start_time) * 1000, 2),
             ], 404);
         }
 
         return response()->json([
             'work_session' => $work_session,
-            'duration_ms' => round((microtime(true) - $start_time) * 1000, 2),
         ]);
     }
 
