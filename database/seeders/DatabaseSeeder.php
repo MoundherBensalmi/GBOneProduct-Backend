@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\PayPeriod;
 use App\Models\Person;
+use App\Models\SawingStation;
 use Illuminate\Database\Seeder;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -69,12 +70,21 @@ class DatabaseSeeder extends Seeder
             'sorting_and_sawing_price' => 10,
         ])->workSessions()->create([
             'date' => '2025-05-15',
-            'start_time' => '2025-05-15 08:00:00',
-            'end_time' => '2025-05-15 17:00:00',
+            'start_time' => '2025-05-15 07:00:00',
+            'end_time' => '2025-05-15 16:00:00',
             'is_active' => true,
         ])->sawingMissions()->create([
             'is_started' => false,
             'is_finished' => false,
+        ]);
+
+        SawingStation::query()->insert([
+            [
+                'name' => 'منشار 1',
+            ],
+            [
+                'name' => 'منشار 2',
+            ],
         ]);
     }
 }
