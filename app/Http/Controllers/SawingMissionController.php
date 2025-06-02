@@ -33,7 +33,6 @@ class SawingMissionController extends Controller
                 'rotations' => function ($query) use ($mission_id) {
                     $query->where('sawing_mission_id', $mission_id);
                 },
-                'rotations.people'
             ])
             ->get();
 
