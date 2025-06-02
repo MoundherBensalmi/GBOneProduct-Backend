@@ -9,6 +9,5 @@ Route::get('/', function () {
 Route::get('/ping', function () {
     return response()->json([
         'status' => 'ok',
-        'timestamp' => now(),
     ]);
 });
