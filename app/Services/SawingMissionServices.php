@@ -13,15 +13,13 @@ class SawingMissionServices
     {
         $sawing_mission = SawingMission::query()
             ->where('id', $mission_id)
-            ->with(['workSession', 'workSession.payPeriod'])
+            ->with(['payPeriod'])
             ->first();
 
         return [
             'is_active' => $sawing_mission &&
-                $sawing_mission->workSession &&
-                $sawing_mission->workSession->is_active &&
-                $sawing_mission->workSession->payPeriod &&
-                $sawing_mission->workSession->payPeriod->is_active,
+                $sawing_mission->payPeriod &&
+                $sawing_mission->payPeriod->is_active,
             'sawing_mission' => $sawing_mission
         ];
     }

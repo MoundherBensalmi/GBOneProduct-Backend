@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InitSawingStationRequest;
 use App\Http\Requests\StoreSawingRotationRequest;
 use App\Http\Requests\UpdateSawingRotationRequest;
+use App\Models\PayPeriod;
 use App\Models\SawingStation;
 use App\Services\SawingMissionServices;
 use Illuminate\Http\JsonResponse;

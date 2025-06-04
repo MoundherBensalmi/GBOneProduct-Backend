@@ -26,8 +26,8 @@ class PayPeriod extends Model
         'end_date' => 'date',
     ];
 
-    public function workSessions(): HasMany
+    public function sawingMissions(): HasMany
     {
-        return $this->hasMany(WorkSession::class);
+        return $this->hasMany(SawingMission::class, 'pay_period_id', 'id');
     }
 }

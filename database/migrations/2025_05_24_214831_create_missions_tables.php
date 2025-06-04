@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('sawing_missions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('work_session_id')
-                ->constrained('work_sessions');
+            $table->foreignId('pay_period_id')
+                ->constrained('pay_periods');
+
+            $table->date('date');
+            $table->string('start_time');
+            $table->string('end_time');
 
             $table->boolean('is_started')->default(false);
             $table->boolean('is_finished')->default(false);

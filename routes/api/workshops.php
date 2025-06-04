@@ -1,13 +1,11 @@
 <?php
 
+use App\Http\Controllers\MissionController;
 use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\SawingMissionController;
-use App\Http\Controllers\WorkSessionController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('work-sessions', [WorkSessionController::class, 'index']);
-Route::get('work-sessions/{session}', [WorkSessionController::class, 'show']);
-Route::post('work-sessions/store', [WorkSessionController::class, 'store']);
+Route::get('work-missions', [MissionController::class, 'index']);
 
 // Sawing Missions
 Route::get('work-missions/sawing/show/{mission_id}', [SawingMissionController::class, 'show']);

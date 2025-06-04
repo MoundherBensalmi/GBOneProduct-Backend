@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SawingMission extends Model
@@ -13,13 +14,18 @@ class SawingMission extends Model
 
     protected $fillable = [
         'work_session_id',
+
+        'date',
+        'start_time',
+        'end_time',
+
         'is_started',
         'is_finished',
     ];
 
-    public function workSession(): BelongsTo
+    public function payPeriod(): BelongsTo
     {
-        return $this->belongsTo(WorkSession::class);
+        return $this->belongsTo(PayPeriod::class, 'pay_period_id');
     }
 
     public function sawingRotations(): HasMany
