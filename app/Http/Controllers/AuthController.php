@@ -15,12 +15,14 @@ class AuthController extends Controller
             $user = Auth::user();
             $token = $user->createToken('GBOneProduct')->plainTextToken;
 
+            $user->load('person');
+
             return $this->sendResponse([
                 'user' => $user,
                 'token' => $token,
             ], 'user_successfully_logged_in');
         } else {
-            return $this->sendError('wrong_credentials.', ['error' => 'wrong_credentials'], 401);
+            return $this->sendError('wrong_credentials', ['error' => 'wrong_credentials'], 401);
         }
     }
 

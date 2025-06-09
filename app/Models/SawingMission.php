@@ -14,6 +14,7 @@ class SawingMission extends Model
 
     protected $fillable = [
         'work_session_id',
+        'assigned_user_id',
 
         'date',
         'start_time',
@@ -31,5 +32,10 @@ class SawingMission extends Model
     public function sawingRotations(): HasMany
     {
         return $this->hasMany(SawingRotation::class);
+    }
+
+    public function assignedUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assigned_user_id');
     }
 }

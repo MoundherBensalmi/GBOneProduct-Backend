@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('sawing_mission_id')->constrained('sawing_missions');
             $table->foreignId('sawing_station_id')->constrained('sawing_stations');
 
-            $table->boolean('is_initial')->default(false);
+            $table->enum('type', ['initial', 'yellow_sawing', 'white_sawing']);
             $table->decimal('amount')->default(0);
 
             $table->softDeletes();

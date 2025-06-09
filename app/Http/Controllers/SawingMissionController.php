@@ -29,17 +29,8 @@ class SawingMissionController extends Controller
             ], 404);
         }
 
-        $sawing_stations = SawingStation::query()
-            ->with([
-                'rotations' => function ($query) use ($mission_id) {
-                    $query->where('sawing_mission_id', $mission_id);
-                },
-            ])
-            ->get();
-
         return response()->json([
             'sawing_mission' => $sawing_mission_data['sawing_mission'],
-            'sawing_stations' => $sawing_stations,
         ]);
     }
 

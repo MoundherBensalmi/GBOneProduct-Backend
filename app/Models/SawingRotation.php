@@ -14,7 +14,7 @@ class SawingRotation extends Model
     protected $fillable = [
         'sawing_station_id',
         'sawing_mission_id',
-        'is_initial',
+        'type',
         'amount',
     ];
 

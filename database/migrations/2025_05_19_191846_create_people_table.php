@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('people', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('current_position_id')->nullable()->constrained('positions');
 
             $table->string('name');
             $table->string('tr_name')->nullable();
             $table->string('phone')->nullable();
+
 
             $table->softDeletes();
             $table->timestamps();
@@ -42,6 +44,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('people_positions');
         Schema::dropIfExists('people');
     }
 };

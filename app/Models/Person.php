@@ -16,14 +16,22 @@ class Person extends Model
     protected $table = 'people';
 
     protected $fillable = [
+        'current_position_id',
         'name',
         'tr_name',
         'phone',
     ];
 
-    public function position(): belongsToMany
+    public function positions(): BelongsToMany
     {
-        return $this->belongsToMany(Position::class, 'people_positions', 'person_id', 'position_id');
+        return $this->belongsToMany(Position::class, 'people_positions', 'person_id', 'position_id')
+            ->withPivot('start_date', 'end_date', 'payment_type', 'salary')
+            ->withTimestamps();
+    }
+
+    public function currentPosition(): BelongsTo
+    {
+        return $this->belongsTo(Position::class, 'current_position_id');
     }
 
     public function user(): HasOne
