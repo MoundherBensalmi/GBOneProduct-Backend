@@ -38,16 +38,17 @@ class SawingMissionServices
 
     public function create_rotation(int $stationId, int $missionId, array $peopleIds, string $type, float $amount, ?string $createdAt = null, ?string $updatedAt = null, bool $load = true): SawingRotation
     {
+        $now = now();
         $rotation = SawingRotation::query()->create([
             'type' => $type,
             'sawing_station_id' => $stationId,
             'sawing_mission_id' => $missionId,
             'amount' => $amount,
-            'created_at' => $createdAt ?? now(),
-            'updated_at' => $updatedAt ?? now()
+            'created_at' => $createdAt ?? $now,
+            'updated_at' => $updatedAt ?? $now,
         ]);
 
-        $this->syncPeopleWithAmount($rotation, $peopleIds, $amount, $createdAt,  $updatedAt);
+        $this->syncPeopleWithAmount($rotation, $peopleIds, $amount, $createdAt, $updatedAt, false);
 
         if ($load) {
             $rotation->load('people');
@@ -78,20 +79,26 @@ class SawingMissionServices
     // ------------------------ private functions ------------------------
     // -------------------------------------------------------------------
 
-    private function syncPeopleWithAmount(SawingRotation $rotation, array $peopleIds, float $totalAmount, ?string $createdAt = null, ?string $updatedAt = null): void
+    private function syncPeopleWithAmount(SawingRotation $rotation, array $peopleIds, float $totalAmount, ?string $createdAt = null, ?string $updatedAt = null, bool $emptyBeforeSync = true): void
     {
-        if (empty($peopleIds)) {
-            $rotation->people()->sync([]);
-            return;
-        }
+        // remove old people from rotation
+        if ($emptyBeforeSync) $rotation->people()->sync([]);
 
+        if (empty($peopleIds)) return;
+
+        $now = now();
         $splitAmount = round($totalAmount / count($peopleIds), 2);
-        $syncData = array_fill_keys($peopleIds, [
-            'amount' => $splitAmount,
-            'created_at' => $createdAt ?? now(),
-            'updated_at' => $updatedAt ?? now()
-        ]);
 
-        $rotation->people()->sync($syncData);
+        $data = array_map(function ($personId) use ($rotation, $splitAmount, $createdAt, $updatedAt, $now) {
+            return [
+                'sawing_rotation_id' => $rotation->getAttribute('id'),
+                'person_id' => $personId,
+                'amount' => $splitAmount,
+                'created_at' => $createdAt ?? $now,
+                'updated_at' => $updatedAt ?? $now,
+            ];
+        }, $peopleIds);
+
+        DB::table('sawing_rotation_person')->insert($data);
     }
 }

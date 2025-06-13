@@ -36,16 +36,16 @@ class WorkshopController extends Controller
             return $this->sendError("المهمة غير موجودة أو منتهية");
         }
 
-        $mission_path = 'sawing_missions/' . $validated['mission_id'] . '/' . now()->format('Y-m-d_H-i-s') . '/';
-        $request->file('mission_db')->store($mission_path, 's3');
-
-        $rotations = json_decode($validated['rotations'], true);
-        if ($rotations) {
-            $jsonFileName = $mission_path . 'rotations_' . now()->timestamp . '.json';
-            Storage::disk('s3')->put($jsonFileName, json_encode($rotations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-        }
-
         try {
+            $mission_path = 'sawing_missions/' . $validated['mission_id'] . '/' . now()->format('Y-m-d_H-i-s') . '/';
+            $request->file('mission_db')->store($mission_path, 's3');
+
+            $rotations = json_decode($validated['rotations'], true);
+            if ($rotations) {
+                $jsonFileName = $mission_path . 'rotations_' . now()->timestamp . '.json';
+                Storage::disk('s3')->put($jsonFileName, json_encode($rotations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            }
+
             DB::transaction(function () use ($rotations, $mission) {
                 foreach ($rotations as $rotation) {
                     $people_ids = array_column($rotation['sawingRotationPeople'], 'person_id');
