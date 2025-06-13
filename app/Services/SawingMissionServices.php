@@ -27,7 +27,7 @@ class SawingMissionServices
     public function init_station(int $station_id, int $mission_id, array $people): SawingRotation
     {
         $initial_rotation = SawingRotation::query()->firstOrCreate([
-            'is_initial' => true,
+            'type' => 'initial',
             'sawing_station_id' => $station_id,
             'sawing_mission_id' => $mission_id,
         ]);
@@ -36,18 +36,23 @@ class SawingMissionServices
         return $initial_rotation->load('people');
     }
 
-    public function create_rotation(int $stationId, int $missionId, array $peopleIds, float $amount): SawingRotation
+    public function create_rotation(int $stationId, int $missionId, array $peopleIds, string $type, float $amount, ?string $createdAt = null, ?string $updatedAt = null, bool $load = true): SawingRotation
     {
         $rotation = SawingRotation::query()->create([
-            'is_initial' => false,
+            'type' => $type,
             'sawing_station_id' => $stationId,
             'sawing_mission_id' => $missionId,
             'amount' => $amount,
+            'created_at' => $createdAt ?? now(),
+            'updated_at' => $updatedAt ?? now()
         ]);
 
-        $this->syncPeopleWithAmount($rotation, $peopleIds, $amount);
+        $this->syncPeopleWithAmount($rotation, $peopleIds, $amount, $createdAt,  $updatedAt);
 
-        return $rotation->load('people');
+        if ($load) {
+            $rotation->load('people');
+        }
+        return $rotation;
     }
 
     public function update_rotation(int $rotationId, array $peopleIds, float $amount): SawingRotation
@@ -73,7 +78,7 @@ class SawingMissionServices
     // ------------------------ private functions ------------------------
     // -------------------------------------------------------------------
 
-    private function syncPeopleWithAmount(SawingRotation $rotation, array $peopleIds, float $totalAmount): void
+    private function syncPeopleWithAmount(SawingRotation $rotation, array $peopleIds, float $totalAmount, ?string $createdAt = null, ?string $updatedAt = null): void
     {
         if (empty($peopleIds)) {
             $rotation->people()->sync([]);
@@ -81,7 +86,11 @@ class SawingMissionServices
         }
 
         $splitAmount = round($totalAmount / count($peopleIds), 2);
-        $syncData = array_fill_keys($peopleIds, ['amount' => $splitAmount]);
+        $syncData = array_fill_keys($peopleIds, [
+            'amount' => $splitAmount,
+            'created_at' => $createdAt ?? now(),
+            'updated_at' => $updatedAt ?? now()
+        ]);
 
         $rotation->people()->sync($syncData);
     }
