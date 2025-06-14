@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PayPeriodController;
 use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\PositionController;
 use Illuminate\Support\Facades\Route;
@@ -25,5 +26,13 @@ Route::group([
         'middleware' => ['gb-auth'],
     ], function () {
         Route::get('', [PositionController::class, 'index']);
+    });
+
+    // -------------------pay periods-------------------
+    Route::group([
+        'prefix' => 'pay-periods',
+        'middleware' => ['gb-auth'],
+    ], function () {
+        Route::get('', [PayPeriodController::class, 'index']);
     });
 });
