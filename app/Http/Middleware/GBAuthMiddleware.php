@@ -27,7 +27,9 @@ class GBAuthMiddleware
 //            return response()->json(['message' => 'Forbidden'], 403);
 //        }
 
-        $request->merge(['user' => $user]);
+        $request->setUserResolver(function () use ($user) {
+            return $user;
+        });
         return $next($request);
     }
 }
