@@ -22,5 +22,31 @@ class PayPeriodController extends Controller
         ]);
     }
 
+    public function show($id): JsonResponse
+    {
+        $pay_period = PayPeriod::query()->findOrFail($id);
 
+        $grouped_missions = [];
+
+        $sawing_missions = $pay_period->sawingMissions()
+            ->with([
+                'assignedUser' => function ($query) {
+                    $query->withTrashed()->with([
+                        'person' => function ($query) {
+                            $query->withTrashed();
+                        }
+                    ]);
+                }
+            ])
+            ->orderBy('date')
+            ->get();
+        foreach ($sawing_missions as $mission) {
+            $grouped_missions[$mission->date]['sawing_missions'][] = $mission;
+        }
+
+        return $this->sendResponse([
+            'pay_period' => $pay_period,
+            'grouped_missions' => $grouped_missions,
+        ]);
+    }
 }

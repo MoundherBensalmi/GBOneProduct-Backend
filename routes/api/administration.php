@@ -34,5 +34,6 @@ Route::group([
         'middleware' => ['gb-auth'],
     ], function () {
         Route::get('', [PayPeriodController::class, 'index']);
+        Route::get('show/{id}', [PayPeriodController::class, 'show']);
     });
 });
