@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PayPeriod;
 use App\Models\Person;
 use App\Models\SawingMission;
+use App\Models\SawingStation;
 use App\Services\SawingMissionServices;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -28,6 +31,31 @@ class WorkshopController extends Controller
             ->get();
         return $this->sendResponse([
             'people' => $people,
+        ]);
+    }
+
+    public function sawing_stations(): JsonResponse
+    {
+        $sawing_stations = SawingStation::query()->get();
+        return $this->sendResponse([
+            'sawing_stations' => $sawing_stations,
+        ]);
+    }
+
+    public function my_missions(Request $request): JsonResponse
+    {
+        $pay_period = PayPeriod::query()->where('is_active', 1)->first();
+        if (!$pay_period) {
+            return $this->sendError('no_active_pay_period');
+        }
+
+        $sawing_missions = $pay_period->sawingMissions()
+            ->where('assigned_user_id', $request->user()->id)
+            ->where('is_finished', 0)
+            ->get();
+
+        return $this->sendResponse([
+            'sawing_missions' => $sawing_missions,
         ]);
     }
 
