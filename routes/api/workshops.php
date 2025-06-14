@@ -11,12 +11,13 @@ use Illuminate\Support\Facades\Route;
 Route::group([
     'middleware' => ['gb-auth'],
 ], function () {
-    Route::get('people/production', [PeopleController::class, 'production']);
+    Route::post('work-missions/sawing/close', [WorkshopController::class, 'close_sawing_mission']);
+    Route::get('people/production', [WorkshopController::class, 'production_people']);
+
     Route::get('sawing-stations', [SawingStationController::class, 'index']);
     Route::get('work-missions/mine', [MissionController::class, 'mine']);
 
 });
-Route::post('work-missions/sawing/close', [WorkshopController::class, 'close_sawing_mission']);
 
 
 

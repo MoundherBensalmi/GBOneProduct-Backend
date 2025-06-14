@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Person;
 use App\Models\SawingMission;
 use App\Services\SawingMissionServices;
 use Exception;
@@ -20,6 +21,16 @@ class WorkshopController extends Controller
         $this->sawingMissionServices = $sawingMissionServices;
     }
 
+    public function production_people(): JsonResponse
+    {
+        $people = Person::withTrashed()
+            ->where('current_position_id', 2)
+            ->get();
+        return $this->sendResponse([
+            'people' => $people,
+        ]);
+    }
+
     public function close_sawing_mission(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -31,6 +42,7 @@ class WorkshopController extends Controller
         $mission = SawingMission::query()
             ->where('id', $validated['mission_id'])
             ->where('is_finished', false)
+            ->where('assigned_user_id', $request->user()->id)
             ->first();
         if (!$mission) {
             return $this->sendError("المهمة غير موجودة أو منتهية");
