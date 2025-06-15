@@ -13,7 +13,7 @@ class SawingMission extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'work_session_id',
+        'pay_period_id',
         'assigned_user_id',
 
         'date',

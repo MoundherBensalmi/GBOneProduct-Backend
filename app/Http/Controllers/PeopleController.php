@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PositionType;
 use App\Http\Requests\StorePersonRequest;
 use App\Models\Person;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +13,18 @@ use Illuminate\Support\Facades\DB;
 
 class PeopleController extends Controller
 {
+    public function mission_users(): JsonResponse
+    {
+        $users = User::query()->with(['person'])
+            ->whereHas('person', function ($query) {
+                $query->where('current_position_id', PositionType::PRODUCTION);
+            })
+            ->get();
+        return $this->sendResponse([
+            'users' => $users,
+        ], 'mission_users_retrieved_successfully.');
+    }
+
     public function index(Request $request): JsonResponse
     {
         $search = $request->input('search');

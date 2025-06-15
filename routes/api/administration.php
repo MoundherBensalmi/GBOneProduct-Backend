@@ -3,6 +3,7 @@
 use App\Http\Controllers\PayPeriodController;
 use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\SawingMissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
@@ -14,6 +15,7 @@ Route::group([
         'prefix' => 'people',
         'middleware' => ['gb-auth'],
     ], function () {
+        Route::get('mission-users', [PeopleController::class, 'mission_users']);
         Route::get('', [PeopleController::class, 'index']);
         Route::post('check', [PeopleController::class, 'check']);
         Route::post('store', [PeopleController::class, 'store']);
@@ -35,5 +37,12 @@ Route::group([
     ], function () {
         Route::get('', [PayPeriodController::class, 'index']);
         Route::get('show/{id}', [PayPeriodController::class, 'show']);
+    });
+
+    Route::group([
+        'prefix' => 'sawing-missions',
+        'middleware' => ['gb-auth'],
+    ], function () {
+        Route::post('store', [SawingMissionController::class, 'store']);
     });
 });
