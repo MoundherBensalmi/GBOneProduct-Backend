@@ -31,6 +31,6 @@ class SortingMission extends Model
 
     public function sortingRotations(): HasMany
     {
-        return $this->hasMany(SortingRotation::class);
+        return $this->hasMany(SortingRotation::class, 'sorting_mission_id');
     }
 }

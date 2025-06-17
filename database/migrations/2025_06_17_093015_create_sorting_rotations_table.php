@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('sorting_rotations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('sorting_mission_id')->constrained('sorting_missions');
+            $table->foreignId('person_id')->constrained('people');
 
-            $table->enum('type', ['initial', 'yellow_sorting', 'white_sorting', 'trimming_price']);
+            $table->enum('type', ['initial', 'yellow_sorting', 'white_sorting', 'trimming']);
             $table->decimal('amount', 10, 2)->default(0);
 
             $table->timestamps();
