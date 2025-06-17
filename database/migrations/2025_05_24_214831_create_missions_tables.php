@@ -22,7 +22,6 @@ return new class extends Migration {
             $table->boolean('is_started')->default(false);
             $table->boolean('is_finished')->default(false);
 
-            $table->softDeletes();
             $table->timestamps();
         });
     }

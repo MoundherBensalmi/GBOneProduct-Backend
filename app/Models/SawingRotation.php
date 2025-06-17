@@ -23,7 +23,7 @@ class SawingRotation extends Model
 
     public function sawingStation(): BelongsTo
     {
-        return $this->belongsTo(SawingStation::class);
+        return $this->belongsTo(SawingStation::class)->withTrashed();
     }
 
     public function sawingMission(): BelongsTo

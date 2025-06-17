@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SawingMission extends Model
 {
-    use SoftDeletes;
-
     protected $fillable = [
         'pay_period_id',
         'assigned_user_id',
