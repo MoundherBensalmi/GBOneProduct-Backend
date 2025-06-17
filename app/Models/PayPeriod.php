@@ -32,4 +32,9 @@ class PayPeriod extends Model
     {
         return $this->hasMany(SawingMission::class, 'pay_period_id', 'id');
     }
+
+    public function sortingMission(): HasMany
+    {
+        return $this->hasMany(SortingMission::class, 'pay_period_id', 'id');
+    }
 }

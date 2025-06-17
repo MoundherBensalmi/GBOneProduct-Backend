@@ -24,6 +24,20 @@ return new class extends Migration {
 
             $table->timestamps();
         });
+
+        Schema::create('sorting_missions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('pay_period_id')->constrained('pay_periods');
+            $table->foreignId('assigned_user_id')->constrained('users');
+
+            $table->date('date');
+            $table->string('start_time');
+            $table->string('end_time');
+
+            $table->enum('status', ['new', 'started', 'finished'])->default('new');
+
+            $table->timestamps();
+        });
     }
 
     /**
@@ -32,5 +46,6 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('sawing_missions');
+        Schema::dropIfExists('sorting_missions');
     }
 };
