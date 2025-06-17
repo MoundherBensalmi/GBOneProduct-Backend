@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SawingRotation extends Model
 {
-    use SoftDeletes;
-
     protected $fillable = [
         'sawing_station_id',
         'sawing_mission_id',

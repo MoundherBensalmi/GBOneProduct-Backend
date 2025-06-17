@@ -19,7 +19,6 @@ return new class extends Migration {
             $table->enum('type', ['initial', 'yellow_sawing', 'white_sawing']);
             $table->decimal('amount', 10, 2)->default(0);
 
-            $table->softDeletes();
             $table->timestamps();
         });
 
