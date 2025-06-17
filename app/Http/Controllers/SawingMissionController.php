@@ -27,8 +27,13 @@ class SawingMissionController extends Controller
     public function show($id): JsonResponse
     {
         $sawing_mission = SawingMission::query()
-            ->where("id", $id)
-            ->with(['payPeriod', 'assignedUser.person'])
+            ->where('id', $id)
+            ->with([
+                'payPeriod',
+                'assignedUser' => fn($q) => $q->withTrashed()->with([
+                    'person' => fn($q) => $q->withTrashed()
+                ])
+            ])
             ->first();
         if (!$sawing_mission) {
             return $this->sendResponse("not_found", "not_found");
