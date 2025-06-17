@@ -44,5 +44,6 @@ Route::group([
         'middleware' => ['gb-auth'],
     ], function () {
         Route::post('store', [SawingMissionController::class, 'store']);
+        Route::get('show/{id}', [SawingMissionController::class, 'show']);
     });
 });

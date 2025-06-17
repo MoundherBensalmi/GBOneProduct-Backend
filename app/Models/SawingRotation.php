@@ -33,13 +33,8 @@ class SawingRotation extends Model
 
     public function people(): BelongsToMany
     {
-        return $this->belongsToMany(Person::class, 'sawing_rotation_person');
-    }
-
-    public function peopleWithAmount(): BelongsToMany
-    {
         return $this->belongsToMany(Person::class, 'sawing_rotation_person')
+            ->withTrashed()
             ->withPivot('amount')
-            ->withTimestamps();
-    }
+            ->withTimestamps();    }
 }

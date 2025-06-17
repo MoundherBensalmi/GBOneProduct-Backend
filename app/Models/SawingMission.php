@@ -36,6 +36,6 @@ class SawingMission extends Model
 
     public function assignedUser(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'assigned_user_id');
+        return $this->belongsTo(User::class, 'assigned_user_id')->withTrashed();
     }
 }

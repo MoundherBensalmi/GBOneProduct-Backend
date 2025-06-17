@@ -34,6 +34,6 @@ class User extends Authenticatable
 
     public function person(): BelongsTo
     {
-        return $this->belongsTo(Person::class, 'person_id', 'id');
+        return $this->belongsTo(Person::class, 'person_id', 'id')->withTrashed();
     }
 }
