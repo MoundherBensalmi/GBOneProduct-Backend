@@ -54,8 +54,14 @@ class WorkshopController extends Controller
             ->where('is_finished', 0)
             ->get();
 
+        $sorting_missions = $pay_period->sortingMissions()
+            ->where('assigned_user_id', $request->user()->id)
+            ->where('status', 'new')
+            ->get();
+
         return $this->sendResponse([
             'sawing_missions' => $sawing_missions,
+            'sorting_missions' => $sorting_missions,
         ]);
     }
 
