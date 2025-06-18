@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Person;
 use App\Models\SortingMission;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SortingMissionController extends Controller

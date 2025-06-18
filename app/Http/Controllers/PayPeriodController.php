@@ -44,7 +44,7 @@ class PayPeriodController extends Controller
             $grouped_missions[$mission->date]['sawing_missions'][] = $mission;
         }
 
-        $sorting_missions = $pay_period->sortingMission()
+        $sorting_missions = $pay_period->sortingMissions()
             ->with([
                 'assignedUser' => function ($query) {
                     $query->withTrashed()->with([
