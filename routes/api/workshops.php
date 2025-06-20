@@ -12,6 +12,7 @@ Route::group([
     Route::get('work-missions/mine', [WorkshopController::class, 'my_missions']);
 
     Route::post('work-missions/sawing/close', [WorkshopController::class, 'close_sawing_mission']);
+    Route::post('work-missions/sorting/close', [WorkshopController::class, 'close_sorting_mission']);
 
 });
 

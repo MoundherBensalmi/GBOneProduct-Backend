@@ -6,6 +6,8 @@ use App\Models\PayPeriod;
 use App\Models\Person;
 use App\Models\SawingMission;
 use App\Models\SawingStation;
+use App\Models\SortingMission;
+use App\Models\SortingRotation;
 use App\Services\SawingMissionServices;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -117,5 +119,59 @@ class WorkshopController extends Controller
         }
 
         return $this->sendResponse("done", 'تم تحميل المهمة بنجاح');
+    }
+
+    public function close_sorting_mission(Request $request)
+    {
+        $validated = $request->validate([
+            'mission_id' => 'required',
+            'rotations' => 'required|json',
+            'mission_db' => 'required|file',
+        ]);
+
+        $sorting_mission = SortingMission::query()
+            ->where('id', $validated['mission_id'])
+            ->where('status', 'newcl')
+            ->where('assigned_user_id', $request->user()->id)
+            ->first();
+
+        if (!$sorting_mission) {
+            return $this->sendError("المهمة غير موجودة أو منتهية");
+        }
+
+        try {
+            $now = now();
+            $mission_path = 'sorting_missions/' . $validated['mission_id'] . '/' . $now->format('Y-m-d_H-i-s') . '/';
+
+            $request->file('mission_db')->store($mission_path, 's3');
+
+            $rotations = json_decode($validated['rotations'], true);
+
+            if ($rotations) {
+                $jsonFileName = $mission_path . 'rotations_' . $now->timestamp . '.json';
+                Storage::disk('s3')->put($jsonFileName, json_encode($rotations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            }
+
+            $insertData = array_map(fn($rotation) => [
+                'sorting_mission_id' => $rotation['sorting_mission_id'],
+                'person_id' => $rotation['person_id'],
+                'type' => $rotation['type'],
+                'amount' => $rotation['amount'],
+                'created_at' => $rotation['created_at'],
+                'updated_at' => $rotation['updated_at'],
+            ], $rotations);
+
+            DB::transaction(function () use ($insertData, $sorting_mission) {
+                SortingRotation::query()->insert($insertData);
+                $sorting_mission->update(['status' => 'finished']);
+            });
+
+        } catch (Exception $e) {
+            Log::error('Rotation creation failed', ['error' => $e]);
+            return $this->sendError("خطأ أثناء رفع المهمة");
+        }
+
+        return $this->sendResponse("done", 'تم تحميل المهمة بنجاح');
+
     }
 }
