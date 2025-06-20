@@ -131,7 +131,7 @@ class WorkshopController extends Controller
 
         $sorting_mission = SortingMission::query()
             ->where('id', $validated['mission_id'])
-            ->where('status', 'newcl')
+            ->where('status', 'new')
             ->where('assigned_user_id', $request->user()->id)
             ->first();
 
