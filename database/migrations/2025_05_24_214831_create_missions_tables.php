@@ -34,7 +34,7 @@ return new class extends Migration {
             $table->string('start_time');
             $table->string('end_time');
 
-            $table->enum('status', ['new', 'started', 'finished'])->default('new');
+            $table->enum('status', ['new', 'ready', 'finished'])->default('new');
 
             $table->timestamps();
         });
