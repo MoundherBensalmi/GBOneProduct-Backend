@@ -4,6 +4,7 @@ use App\Http\Controllers\PayPeriodController;
 use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\SawingMissionController;
+use App\Http\Controllers\SawingStationController;
 use App\Http\Controllers\SortingMissionController;
 use Illuminate\Support\Facades\Route;
 
@@ -56,5 +57,14 @@ Route::group([
     ], function () {
         Route::get('show/{id}', [SortingMissionController::class, 'show']);
         Route::post('store', [SortingMissionController::class, 'store']);
+    });
+
+    // -------------------sawing stations-------------------
+    Route::group([
+        'prefix' => 'sawing-stations',
+        'middleware' => ['gb-auth'],
+    ], function () {
+        Route::get('', [SawingStationController::class, 'index']);
+        Route::post('store', [SawingStationController::class, 'store']);
     });
 });
