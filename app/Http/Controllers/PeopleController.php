@@ -44,12 +44,12 @@ class PeopleController extends Controller
 
         if ($search) {
             $people->where(function ($query) use ($search) {
-                $query->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('tr_name', 'like', '%' . $search . '%')
-                    ->orWhere('phone', 'like', '%' . $search . '%')
+                $query->where('name', 'ilike', '%' . $search . '%')
+                    ->orWhere('tr_name', 'ilike', '%' . $search . '%')
+                    ->orWhere('phone', 'ilike', '%' . $search . '%')
                     ->orWhereHas('currentPosition', function ($query) use ($search) {
-                        $query->where('name', 'like', '%' . $search . '%')
-                            ->orWhere('tr_name', 'like', '%' . $search . '%');
+                        $query->where('name', 'ilike', '%' . $search . '%')
+                            ->orWhere('tr_name', 'ilike', '%' . $search . '%');
                     });
             });
         }
@@ -95,8 +95,8 @@ class PeopleController extends Controller
 
         $query = Person::withTrashed()->with('currentPosition');
 
-        $query->where('name', 'LIKE', '%' . $validated['name'] . '%')
-            ->orWhere('tr_name', 'LIKE', '%' . $validated['name'] . '%');
+        $query->where('name', 'ilike', '%' . $validated['name'] . '%')
+            ->orWhere('tr_name', 'ilike', '%' . $validated['name'] . '%');
         $people = $query->orderBy('name')->limit(10)->get();
 
         return response()->json([
