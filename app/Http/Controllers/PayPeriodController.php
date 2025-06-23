@@ -38,7 +38,6 @@ class PayPeriodController extends Controller
                     ]);
                 }
             ])
-            ->orderBy('date')
             ->get();
         foreach ($sawing_missions as $mission) {
             $grouped_missions[$mission->date]['sawing_missions'][] = $mission;
@@ -54,11 +53,11 @@ class PayPeriodController extends Controller
                     ]);
                 }
             ])
-            ->orderBy('date')
             ->get();
         foreach ($sorting_missions as $mission) {
             $grouped_missions[$mission->date]['sorting_missions'][] = $mission;
         }
+        krsort($grouped_missions);
 
         return $this->sendResponse([
             'pay_period' => $pay_period,
