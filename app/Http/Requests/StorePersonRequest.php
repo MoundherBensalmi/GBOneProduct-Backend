@@ -28,7 +28,7 @@ class StorePersonRequest extends FormRequest
             'current_position_id' => 'nullable|exists:positions,id',
 
             'create_user' => 'boolean',
-            'username' => 'required_if:create_user,true|string|max:255|unique:users,username',
+            'username' => 'required_if:create_user,true|string|max:255|unique:people,username',
             'password' => 'required_if:create_user,true|string|min:3',
             'role' => 'required_if:create_user,true|in:user,admin',
         ];

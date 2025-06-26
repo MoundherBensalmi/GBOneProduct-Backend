@@ -14,9 +14,7 @@ class SortingMissionController extends Controller
             ->where('id', $id)
             ->with([
                 'payPeriod',
-                'assignedUser' => fn($q) => $q->withTrashed()->with([
-                    'person' => fn($q) => $q->withTrashed()
-                ])
+                'responsible'
             ])
             ->first();
 

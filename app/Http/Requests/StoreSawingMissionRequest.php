@@ -23,7 +23,7 @@ class StoreSawingMissionRequest extends FormRequest
     {
         return [
             'pay_period_id' => 'required',
-            'assigned_user_id' => 'required',
+            'assigned_person_id' => 'required',
             'date' => 'required|date',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i',

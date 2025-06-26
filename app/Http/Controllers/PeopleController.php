@@ -15,10 +15,10 @@ class PeopleController extends Controller
 {
     public function mission_users(): JsonResponse
     {
-        $users = User::query()->with(['person'])
-            ->whereHas('person', function ($query) {
-                $query->where('current_position_id', PositionType::PRODUCTION);
-            })
+        $users = Person::query()
+            ->where('current_position_id', PositionType::PRODUCTION)
+            ->whereNotNull('username')
+            ->whereNotNull('password')
             ->get();
         return $this->sendResponse([
             'users' => $users,
@@ -30,21 +30,18 @@ class PeopleController extends Controller
         $search = $request->input('search');
         $onlyUsers = $request->input('only_users', false);
 
-        $isAdmin = Auth::guard('sanctum')->user()->role === 'admin';
+        $isAdmin = $request->user()->role === 'admin';
 
-        $people = Person::query()->with(['user', 'currentPosition']);
+        $people = Person::query()->with('currentPosition');
 
         if (!$isAdmin) {
-            $people->whereDoesntHave('user', function ($query) {
-                $query->whereHas('roles', function ($roleQuery) {
-                    $roleQuery->where('name', 'admin');
-                });
-            });
+            $people->where('role', '!=', 'admin');
         }
 
         if ($search) {
             $people->where(function ($query) use ($search) {
-                $query->where('name', 'ilike', '%' . $search . '%')
+                $query->where('id', 'ilike', '%' . $search . '%')
+                    ->orWhere('name', 'ilike', '%' . $search . '%')
                     ->orWhere('tr_name', 'ilike', '%' . $search . '%')
                     ->orWhere('phone', 'ilike', '%' . $search . '%')
                     ->orWhereHas('currentPosition', function ($query) use ($search) {
@@ -55,26 +52,17 @@ class PeopleController extends Controller
         }
 
         if ($onlyUsers) {
-            $people->whereHas('user');
+            $people->whereNotNull(['username', 'password']);
         }
 
-        $people = $people->orderBy('name', 'asc')->paginate();
+        $people = $people->orderBy('name')->paginate();
 
         $peopleCountQuery = Person::query();
-        $usersCountQuery = Person::query()->whereHas('user');
+        $usersCountQuery = Person::query()->whereNotNull(['username', 'password']);
 
         if (!$isAdmin) {
-            $peopleCountQuery->whereDoesntHave('user', function ($query) {
-                $query->whereHas('roles', function ($roleQuery) {
-                    $roleQuery->where('name', 'admin');
-                });
-            });
-
-            $usersCountQuery->whereDoesntHave('user', function ($query) {
-                $query->whereHas('roles', function ($roleQuery) {
-                    $roleQuery->where('name', 'admin');
-                });
-            });
+            $peopleCountQuery->where('role', '!=', 'admin');
+            $usersCountQuery->where('role', '!=', 'admin');
         }
 
         $peopleCount = $peopleCountQuery->count();
@@ -110,26 +98,26 @@ class PeopleController extends Controller
         $validated = $request->validated();
         $willCreateUser = isset($validated['create_user']) && $validated['create_user'];
 
-        $user = Auth::guard('sanctum')->user();
+        $user = $request->user();
         if ($user->role !== 'admin' && $willCreateUser && $validated['role'] === 'admin') {
             return $this->sendError('unauthorized_to_create_admin_users.', [], 403);
         }
         DB::beginTransaction();
         try {
-            $person = Person::query()->create([
+            $new_person_data = [
                 'name' => $validated['name'],
                 'tr_name' => $validated['tr_name'],
                 'phone' => $validated['phone'],
                 'current_position_id' => $validated['current_position_id'],
-            ]);
+            ];
 
             if ($willCreateUser) {
-                $person->user()->create([
-                    'username' => $validated['username'],
-                    'password' => bcrypt($validated['password']),
-                    'role' => $validated['role'],
-                ]);
+                $new_person_data['username'] = $validated['username'];
+                $new_person_data['password'] = bcrypt($validated['password']);
+                $new_person_data['role'] = $validated['role'];
             }
+
+            Person::query()->create($new_person_data);
 
             DB::commit();
         } catch (\Throwable $e) {

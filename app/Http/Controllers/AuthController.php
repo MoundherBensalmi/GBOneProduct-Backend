@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Person;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,8 +15,6 @@ class AuthController extends Controller
             $user = Auth::user();
             $token = $user->createToken('GBOneProduct')->plainTextToken;
 
-            $user->load('person');
-
             return $this->sendResponse([
                 'user' => $user,
                 'token' => $token,
@@ -28,9 +26,8 @@ class AuthController extends Controller
 
     public function me(): JsonResponse
     {
-        /** @var User $user */
+        /** @var Person $user */
         $user = Auth::guard('sanctum')->user();
-        $user->load('person');
 
         return $this->sendResponse([
             'user' => $user,

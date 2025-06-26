@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('tr_name')->nullable();
             $table->string('phone')->nullable();
 
+            $table->string('username')->unique()->nullable();
+            $table->string('password')->nullable();
+            $table->string('role', 20)->default('user');
 
             $table->softDeletes();
             $table->timestamps();

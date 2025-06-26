@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class Person extends Model
+class Person extends Authenticatable
 {
-    use SoftDeletes;
+    use Notifiable, HasApiTokens, SoftDeletes;
 
     protected $table = 'people';
 
@@ -20,7 +20,21 @@ class Person extends Model
         'name',
         'tr_name',
         'phone',
+        'username',
+        'password',
+        'role',
     ];
+
+    protected $hidden = [
+        'password',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+        ];
+    }
 
     public function positions(): BelongsToMany
     {
@@ -32,10 +46,5 @@ class Person extends Model
     public function currentPosition(): BelongsTo
     {
         return $this->belongsTo(Position::class, 'current_position_id');
-    }
-
-    public function user(): HasOne
-    {
-        return $this->hasOne(User::class, 'person_id', 'id')->latestOfMany();
     }
 }

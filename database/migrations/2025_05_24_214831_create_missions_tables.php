@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('sawing_missions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pay_period_id')->constrained('pay_periods');
-            $table->foreignId('assigned_user_id')->constrained('users');
+            $table->foreignId('assigned_person_id')->constrained('people');
 
             $table->date('date');
             $table->string('start_time');
@@ -28,7 +28,7 @@ return new class extends Migration {
         Schema::create('sorting_missions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pay_period_id')->constrained('pay_periods');
-            $table->foreignId('assigned_user_id')->constrained('users');
+            $table->foreignId('assigned_person_id')->constrained('people');
 
             $table->date('date');
             $table->string('start_time');

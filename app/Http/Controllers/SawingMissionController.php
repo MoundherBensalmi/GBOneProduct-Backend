@@ -28,12 +28,7 @@ class SawingMissionController extends Controller
     {
         $sawing_mission = SawingMission::query()
             ->where('id', $id)
-            ->with([
-                'payPeriod',
-                'assignedUser' => fn($q) => $q->withTrashed()->with([
-                    'person' => fn($q) => $q->withTrashed()
-                ])
-            ])
+            ->with('responsible')
             ->first();
         if (!$sawing_mission) {
             return $this->sendResponse("not_found", "not_found");

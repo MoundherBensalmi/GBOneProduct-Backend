@@ -12,7 +12,7 @@ class SawingMission extends Model
 {
     protected $fillable = [
         'pay_period_id',
-        'assigned_user_id',
+        'assigned_person_id',
 
         'date',
         'start_time',
@@ -32,8 +32,8 @@ class SawingMission extends Model
         return $this->hasMany(SawingRotation::class);
     }
 
-    public function assignedUser(): BelongsTo
+    public function responsible(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'assigned_user_id')->withTrashed();
+        return $this->belongsTo(Person::class, 'assigned_person_id')->withTrashed();
     }
 }
