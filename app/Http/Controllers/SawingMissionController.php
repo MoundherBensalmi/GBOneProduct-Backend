@@ -39,10 +39,6 @@ class SawingMissionController extends Controller
             return $this->sendResponse("not_found", "not_found");
         }
 
-        $rotations = $sawing_mission->sawingRotations()
-            ->where('type', '!=', 'initial')
-            ->get();
-
         $total_per_type = $sawing_mission->sawingRotations()
             ->where('type', '!=', 'initial')
             ->select('type', DB::raw('SUM(amount) as total'))
@@ -77,11 +73,28 @@ class SawingMissionController extends Controller
 
         $total_per_person = array_values($total_per_person);
 
+        $total_per_stations = $sawing_mission->sawingRotations()
+            ->where('type', '!=', 'initial')
+            ->select(
+                'sawing_station_id',
+                'type',
+                DB::raw('SUM(amount) as total')
+            )
+            ->groupBy('sawing_station_id', 'type')
+            ->get();
+
+        $rotations = $sawing_mission->sawingRotations()
+            ->where('type', '!=', 'initial')
+            ->select('sawing_station_id', 'type', 'amount')
+            ->get()
+            ->groupBy(['sawing_station_id', 'type']);
+
         return $this->sendResponse([
             'sawing_mission' => $sawing_mission,
-            'rotations' => $rotations->groupBy('type'),
+            'rotations' => $rotations,
             'total_per_type' => $total_per_type,
-            'total_per_person' => $total_per_person
+            'total_per_person' => $total_per_person,
+            'total_per_stations' => $total_per_stations
         ]);
     }
 }
