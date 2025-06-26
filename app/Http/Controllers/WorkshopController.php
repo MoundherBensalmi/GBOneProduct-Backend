@@ -12,7 +12,6 @@ use App\Services\SawingMissionServices;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -52,12 +51,12 @@ class WorkshopController extends Controller
         }
 
         $sawing_missions = $pay_period->sawingMissions()
-            ->where('assigned_user_id', $request->user()->id)
+            ->where('assigned_person_id', $request->user()->id)
             ->where('is_finished', 0)
             ->get();
 
         $sorting_missions = $pay_period->sortingMissions()
-            ->where('assigned_user_id', $request->user()->id)
+            ->where('assigned_person_id', $request->user()->id)
             ->where('status', 'new')
             ->get();
 
