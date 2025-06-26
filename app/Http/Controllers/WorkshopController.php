@@ -86,12 +86,12 @@ class WorkshopController extends Controller
 
         try {
             $mission_path = 'sawing_missions/' . $validated['mission_id'] . '/' . now()->format('Y-m-d_H-i-s') . '/';
-            $request->file('mission_db')->store($mission_path, 's3');
+            $request->file('mission_db')->store($mission_path);
 
             $rotations = json_decode($validated['rotations'], true);
             if ($rotations) {
                 $jsonFileName = $mission_path . 'rotations_' . now()->timestamp . '.json';
-                Storage::disk('s3')->put($jsonFileName, json_encode($rotations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+                Storage::disk('public')->put($jsonFileName, json_encode($rotations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
             }
 
             DB::transaction(function () use ($rotations, $mission) {
@@ -143,13 +143,13 @@ class WorkshopController extends Controller
             $now = now();
             $mission_path = 'sorting_missions/' . $validated['mission_id'] . '/' . $now->format('Y-m-d_H-i-s') . '/';
 
-            $request->file('mission_db')->store($mission_path, 's3');
+            $request->file('mission_db')->store($mission_path);
 
             $rotations = json_decode($validated['rotations'], true);
 
             if ($rotations) {
                 $jsonFileName = $mission_path . 'rotations_' . $now->timestamp . '.json';
-                Storage::disk('s3')->put($jsonFileName, json_encode($rotations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+                Storage::disk('public')->put($jsonFileName, json_encode($rotations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
             }
 
             $insertData = array_map(fn($rotation) => [
