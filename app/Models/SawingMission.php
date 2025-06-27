@@ -19,6 +19,9 @@ class SawingMission extends Model
         'end_time',
 
         'status',
+
+        'yellow_sawing_price',
+        'white_sawing_price',
     ];
 
     public function payPeriod(): BelongsTo

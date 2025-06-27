@@ -16,15 +16,6 @@ return new class extends Migration {
             $table->date('end_date');
             $table->boolean('is_active')->default(false);
 
-            $table->decimal('white_sorting_price')->default(0);
-            $table->decimal('yellow_sorting_price')->default(0);
-            $table->decimal('trimming_price')->default(0);
-
-            $table->decimal('yellow_sawing_price')->default(0);
-            $table->decimal('white_sawing_price')->default(0);
-            $table->decimal('yellow_sorting_and_sawing_price')->default(0);
-            $table->decimal('white_sorting_and_sawing_price')->default(0);
-
             $table->softDeletes();
             $table->timestamps();
         });

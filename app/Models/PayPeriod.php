@@ -14,13 +14,6 @@ class PayPeriod extends Model
         'start_date',
         'end_date',
         'is_active',
-        'white_sorting_price',
-        'yellow_sorting_price',
-        'trimming_price',
-        'yellow_sawing_price',
-        'white_sawing_price',
-        'yellow_sorting_and_sawing_price',
-        'white_sorting_and_sawing_price'
     ];
 
     protected $casts = [

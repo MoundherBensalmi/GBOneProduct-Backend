@@ -68,5 +68,6 @@ Route::group([
     ], function () {
         Route::get('', [SawingStationController::class, 'index']);
         Route::post('store', [SawingStationController::class, 'store']);
+        Route::post('update/{id}', [SawingStationController::class, 'update']);
     });
 });

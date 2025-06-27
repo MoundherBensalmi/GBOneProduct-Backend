@@ -17,6 +17,10 @@ class SortingMission extends Model
         'end_time',
 
         'status',
+
+        'yellow_sorting_price',
+        'white_sorting_price',
+        'trimming_price',
     ];
 
     public function payPeriod(): BelongsTo

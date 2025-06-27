@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSawingMissionRequest;
+use App\Models\PriceSettings;
 use App\Models\SawingMission;
 use App\Services\SawingMissionServices;
 use Illuminate\Http\JsonResponse;
@@ -20,6 +21,11 @@ class SawingMissionController extends Controller
     public function store(StoreSawingMissionRequest $request): JsonResponse
     {
         $validated = $request->validated();
+
+        $price_settings = PriceSettings::query()->latest()->first();
+        $validated['yellow_sawing_price'] = $price_settings->yellow_sawing_price;
+        $validated['white_sawing_price'] = $price_settings->white_sawing_price;
+
         SawingMission::query()->create($validated);
         return $this->sendResponse("done", 200);
     }

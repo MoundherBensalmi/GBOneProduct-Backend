@@ -24,4 +24,17 @@ class SawingStationController extends Controller
         SawingStation::query()->create($validated);
         return $this->sendResponse("done");
     }
+
+    public function update(Request $request, $id): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+        $sawing_station = SawingStation::query()->find($id);
+        if (!$sawing_station) {
+            return $this->sendError("not_found");
+        }
+        $sawing_station->update($validated);
+        return $this->sendResponse("done");
+    }
 }

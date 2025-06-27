@@ -21,6 +21,9 @@ return new class extends Migration {
 
             $table->enum('status', ['new', 'ready', 'finished'])->default('new');
 
+            $table->decimal('yellow_sawing_price');
+            $table->decimal('white_sawing_price');
+
             $table->timestamps();
         });
 
@@ -34,6 +37,10 @@ return new class extends Migration {
             $table->string('end_time');
 
             $table->enum('status', ['new', 'ready', 'finished'])->default('new');
+
+            $table->decimal('white_sorting_price');
+            $table->decimal('yellow_sorting_price');
+            $table->decimal('trimming_price');
 
             $table->timestamps();
         });
