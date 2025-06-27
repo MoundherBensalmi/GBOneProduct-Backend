@@ -80,7 +80,7 @@ class WorkshopController extends Controller
             ->where('assigned_person_id', $request->user()->id)
             ->first();
         if (!$mission) {
-            return $this->sendError("المهمة غير موجودة أو منتهية");
+            return $this->sendError("المهمة غير موجودة");
         }
 
         try {
@@ -134,7 +134,7 @@ class WorkshopController extends Controller
             ->first();
 
         if (!$sorting_mission) {
-            return $this->sendError("المهمة غير موجودة أو منتهية");
+            return $this->sendError("المهمة غير موجودة");
         }
 
         try {
