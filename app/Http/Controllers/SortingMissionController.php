@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreSortingMissionRequest;
+use App\Models\PriceSettings;
 use App\Models\SortingMission;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -72,5 +74,18 @@ class SortingMissionController extends Controller
         ]);
 
         return $this->sendResponse("done");
+    }
+
+    public function store(StoreSortingMissionRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+
+        $price_settings = PriceSettings::query()->latest()->first();
+        $validated['yellow_sorting_price'] = $price_settings->yellow_sorting_price;
+        $validated['white_sorting_price'] = $price_settings->white_sorting_price;
+        $validated['trimming_price'] = $price_settings->trimming_price;
+
+        SortingMission::query()->create($validated);
+        return $this->sendResponse("done", 200);
     }
 }
