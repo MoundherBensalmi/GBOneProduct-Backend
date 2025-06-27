@@ -28,10 +28,10 @@ class SawingMissionController extends Controller
     {
         $sawing_mission = SawingMission::query()
             ->where('id', $id)
-            ->with('responsible')
+            ->with(['payPeriod', 'responsible'])
             ->first();
-        if (!$sawing_mission) {
-            return $this->sendResponse("not_found", "not_found");
+        if (!$sawing_mission || !$sawing_mission->payPeriod) {
+            return $this->sendError("not_found");
         }
 
         $total_per_type = $sawing_mission->sawingRotations()
@@ -101,8 +101,8 @@ class SawingMissionController extends Controller
         $sawing_mission = SawingMission::query()
             ->where('id', $id)
             ->first();
-        if (!$sawing_mission) {
-            return $this->sendResponse("not_found", "not_found");
+        if (!$sawing_mission || !$sawing_mission->payPeriod) {
+            return $this->sendError("not_found");
         }
 
         $sawing_mission->update([

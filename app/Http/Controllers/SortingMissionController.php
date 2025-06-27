@@ -18,8 +18,8 @@ class SortingMissionController extends Controller
             ])
             ->first();
 
-        if (!$sorting_mission) {
-            return $this->sendResponse("not_found", "not_found");
+        if (!$sorting_mission || !$sorting_mission->payPeriod) {
+            return $this->sendError("not_found");
         }
 
         $total_per_person_per_type = $sorting_mission->sortingRotations()
@@ -31,14 +31,14 @@ class SortingMissionController extends Controller
                 'type',
                 DB::raw('SUM(amount) as total')
             ])
-            ->groupBy('people.id', 'people.name', 'people.tr_name',  'type')
+            ->groupBy('people.id', 'people.name', 'people.tr_name', 'type')
             ->get();
 
         $total_per_person = [];
         foreach ($total_per_person_per_type as $row) {
-            if(!isset($total_per_person[$row->id])) {
+            if (!isset($total_per_person[$row->id])) {
                 $total_per_person[$row->id] = [
-                    'id' =>  $row->id,
+                    'id' => $row->id,
                     'name' => $row->name,
                     'tr_name' => $row->tr_name,
                     'trimming' => 0,
@@ -63,8 +63,8 @@ class SortingMissionController extends Controller
         ]);
 
         $sorting_mission = SortingMission::query()->find($id);
-        if (!$sorting_mission) {
-            return $this->sendResponse("not_found", "not_found");
+        if (!$sorting_mission || !$sorting_mission->payPeriod) {
+            return $this->sendError("not_found");
         }
 
         $sorting_mission->update([
