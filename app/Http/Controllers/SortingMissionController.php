@@ -55,4 +55,22 @@ class SortingMissionController extends Controller
             'total_per_person' => $total_per_person
         ]);
     }
+
+    public function update_status($id): JsonResponse
+    {
+        $validated = request()->validate([
+            'status' => 'required|in:new,ready,finished',
+        ]);
+
+        $sorting_mission = SortingMission::query()->find($id);
+        if (!$sorting_mission) {
+            return $this->sendResponse("not_found", "not_found");
+        }
+
+        $sorting_mission->update([
+            'status' => $validated['status'],
+        ]);
+
+        return $this->sendResponse("done");
+    }
 }

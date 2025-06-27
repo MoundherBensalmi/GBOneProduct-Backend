@@ -92,4 +92,23 @@ class SawingMissionController extends Controller
             'total_per_stations' => $total_per_stations
         ]);
     }
+
+    public function update_status($id): JsonResponse
+    {
+        $validated = request()->validate([
+            'status' => 'required|in:new,ready,finished',
+        ]);
+        $sawing_mission = SawingMission::query()
+            ->where('id', $id)
+            ->first();
+        if (!$sawing_mission) {
+            return $this->sendResponse("not_found", "not_found");
+        }
+
+        $sawing_mission->update([
+            'status' => $validated['status'],
+        ]);
+
+        return $this->sendResponse("done");
+    }
 }

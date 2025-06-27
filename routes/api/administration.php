@@ -47,6 +47,7 @@ Route::group([
         'middleware' => ['gb-auth'],
     ], function () {
         Route::get('show/{id}', [SawingMissionController::class, 'show']);
+        Route::post('update-status/{id}', [SawingMissionController::class, 'update_status']);
         Route::post('store', [SawingMissionController::class, 'store']);
     });
 
@@ -56,6 +57,7 @@ Route::group([
         'middleware' => ['gb-auth'],
     ], function () {
         Route::get('show/{id}', [SortingMissionController::class, 'show']);
+        Route::post('update-status/{id}', [SortingMissionController::class, 'update_status']);
         Route::post('store', [SortingMissionController::class, 'store']);
     });
 
