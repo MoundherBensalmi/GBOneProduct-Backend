@@ -77,7 +77,7 @@ class WorkshopController extends Controller
         $mission = SawingMission::query()
             ->where('id', $validated['mission_id'])
             ->where('status', 'ready')
-            ->where('assigned_user_id', $request->user()->id)
+            ->where('assigned_person_id', $request->user()->id)
             ->first();
         if (!$mission) {
             return $this->sendError("المهمة غير موجودة أو منتهية");
@@ -130,7 +130,7 @@ class WorkshopController extends Controller
         $sorting_mission = SortingMission::query()
             ->where('id', $validated['mission_id'])
             ->where('status', 'ready')
-            ->where('assigned_user_id', $request->user()->id)
+            ->where('assigned_person_id', $request->user()->id)
             ->first();
 
         if (!$sorting_mission) {
