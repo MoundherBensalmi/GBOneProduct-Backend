@@ -18,8 +18,7 @@ class SawingMission extends Model
         'start_time',
         'end_time',
 
-        'is_started',
-        'is_finished',
+        'status',
     ];
 
     public function payPeriod(): BelongsTo

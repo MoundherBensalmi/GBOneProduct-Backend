@@ -52,7 +52,7 @@ class WorkshopController extends Controller
 
         $sawing_missions = $pay_period->sawingMissions()
             ->where('assigned_person_id', $request->user()->id)
-            ->where('is_finished', 0)
+            ->where('status', 'new')
             ->get();
 
         $sorting_missions = $pay_period->sortingMissions()
@@ -76,7 +76,7 @@ class WorkshopController extends Controller
 
         $mission = SawingMission::query()
             ->where('id', $validated['mission_id'])
-            ->where('is_finished', false)
+            ->where('status', 'ready')
             ->where('assigned_user_id', $request->user()->id)
             ->first();
         if (!$mission) {
@@ -108,8 +108,7 @@ class WorkshopController extends Controller
                     );
                 }
                 $mission->update([
-                    'is_started' => true,
-                    'is_finished' => true,
+                    'status' => 'finished',
                 ]);
             });
         } catch (Exception $e) {
@@ -120,7 +119,7 @@ class WorkshopController extends Controller
         return $this->sendResponse("done", 'تم تحميل المهمة بنجاح');
     }
 
-    public function close_sorting_mission(Request $request)
+    public function close_sorting_mission(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'mission_id' => 'required',
@@ -130,7 +129,7 @@ class WorkshopController extends Controller
 
         $sorting_mission = SortingMission::query()
             ->where('id', $validated['mission_id'])
-            ->where('status', "!=", 'finished')
+            ->where('status', 'ready')
             ->where('assigned_user_id', $request->user()->id)
             ->first();
 
